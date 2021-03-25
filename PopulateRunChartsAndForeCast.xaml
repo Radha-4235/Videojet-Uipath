@@ -1,0 +1,884 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="PopulateRunChartsAndForeCast" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="processSuccesful" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="out_runChartsTab" Type="OutArgument(x:String)" />
+    <x:Property Name="out_businessDate" Type="OutArgument(x:String)" />
+    <x:Property Name="out_runChartUSOutputDT" Type="OutArgument(sd:DataTable)" />
+    <x:Property Name="out_runChartCanOutputDT" Type="OutArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>960,7884</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>PopulateRunChartsAndForeCast_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="34">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>UiPath.Mail</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>UiPath.Mail.SMTP.Activities</x:String>
+      <x:String>UiPath.Mail.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="62">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.PDF.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="PopulateRunChartsAndForeCast" sap:VirtualizedContainerService.HintSize="939,7819" sap2010:WorkflowViewState.IdRef="Sequence_153">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="sd:DataRow[]" Name="findCurrentDate" />
+      <Variable x:TypeArguments="x:String" Name="fiscalMonth" />
+      <Variable x:TypeArguments="x:String" Name="currentDate" />
+      <Variable x:TypeArguments="x:String" Name="fiscalFile" />
+      <Variable x:TypeArguments="sd:DataTable" Name="fiscalLookupDT" />
+      <Variable x:TypeArguments="x:String" Name="runChartTab" />
+      <Variable x:TypeArguments="x:String" Name="serviceRevenueFile" />
+      <Variable x:TypeArguments="x:String" Name="runChartFile" />
+      <Variable x:TypeArguments="x:String" Name="forecastFile" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="runchartSheetList" />
+      <Variable x:TypeArguments="x:Boolean" Name="NASheetPresent" />
+      <Variable x:TypeArguments="x:String" Name="FindingUS" />
+      <Variable x:TypeArguments="x:String" Name="FindingCAN" />
+      <Variable x:TypeArguments="sd:DataTable" Name="runchartDT" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="USRowDateItem" />
+      <Variable x:TypeArguments="x:Int32" Name="USRowNum" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="CanRowDateItem" />
+      <Variable x:TypeArguments="x:Int32" Name="CanRowNum" />
+      <Variable x:TypeArguments="x:Int32" Name="currentDateRowUS" />
+      <Variable x:TypeArguments="x:Int32" Name="currentDateRowCan" />
+      <Variable x:TypeArguments="x:String" Name="businessDate" />
+      <Variable x:TypeArguments="x:String" Name="lastBusinessDayPrevMon" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="prevMonthData" />
+      <Variable x:TypeArguments="sd:DataTable" Name="serviceRevenueUSDT" />
+      <Variable x:TypeArguments="sd:DataTable" Name="serviceCanDT" />
+      <Variable x:TypeArguments="sd:DataTable" Name="runChartUSOutputDT" />
+      <Variable x:TypeArguments="sd:DataTable" Name="runChartCanOutputDT" />
+      <Variable x:TypeArguments="ui:WorkbookApplication" Name="excelWB" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="FindDataItem" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Assign sap2010:Annotation.AnnotationText="Assign Current date" DisplayName="Assign - Current Date" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="Assign_210">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[currentDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[DateTime.Now.ToString("MM/dd/yyyy")]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Current Date" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="LogMessage_94" Level="Info" Message="[&quot;Today's Date : &quot;+currentDate]" />
+    <Assign DisplayName="Assign Fiscal File " sap:VirtualizedContainerService.HintSize="897,60" sap2010:WorkflowViewState.IdRef="Assign_211">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[fiscalFile]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[path.Combine(Environment.CurrentDirectory,"Data\Input",in_Config("FiscalLookupFileName").ToString)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:ReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read Fiscal Lookup File to get the Run Charts tab" DataTable="[fiscalLookupDT]" DisplayName="Read Fiscal Lookup File" sap:VirtualizedContainerService.HintSize="897,118" sap2010:WorkflowViewState.IdRef="ReadRange_18" SheetName="[in_Config(&quot;ServiceReportSheetName3&quot;).ToString]" WorkbookPath="[fiscalFile]">
+      <ui:ReadRange.Range>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:ReadRange.Range>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ReadRange>
+    <Assign sap2010:Annotation.AnnotationText="Get the rows which the value has current date" DisplayName="Assign Current Date Row" sap:VirtualizedContainerService.HintSize="897,102" sap2010:WorkflowViewState.IdRef="Assign_212">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataRow[]">[findCurrentDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataRow[]">[(From n in fiscalLookupDT.Select Where n(0).ToString.Contains(currentDate) Select n).ToArray]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Current date in Fiscal File" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="LogMessage_95" Level="Info" Message="[findCurrentDate.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Get the Rows which the value has Curent date corresponding Fiscal Month" DisplayName="Assign Fiscal Month Row" sap:VirtualizedContainerService.HintSize="897,102" sap2010:WorkflowViewState.IdRef="Assign_213">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[fiscalMonth]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[findCurrentDate(0).Item(1).ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Fiscal Month Value" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="LogMessage_96" Level="Info" Message="[&quot;Current Month for Current Date :&quot;+fiscalMonth.ToString]" />
+    <Assign DisplayName="Assign - Sheet Tab Name" sap:VirtualizedContainerService.HintSize="897,60" sap2010:WorkflowViewState.IdRef="Assign_214">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[runChartTab]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Mid(fiscalMonth,1,3) + "20" + Mid(fiscalMonth,5,2)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign -Out Run Charts Tab" sap:VirtualizedContainerService.HintSize="897,60" sap2010:WorkflowViewState.IdRef="Assign_215">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_runChartsTab]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[runChartTab]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -out Run Chart Tab" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="LogMessage_120" Level="Info" Message="[&quot;Run Chart Tab Out Argument is : &quot;+out_runChartsTab]" />
+    <ui:LogMessage DisplayName="Run Charts Tab" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="LogMessage_97" Level="Info" Message="[&quot;Run Charts Tab Name: &quot;+runChartTab.ToString]" />
+    <Assign DisplayName="Assign - Service Revenue File" sap:VirtualizedContainerService.HintSize="897,60" sap2010:WorkflowViewState.IdRef="Assign_216">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[serviceRevenueFile]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[path.Combine(Environment.CurrentDirectory,"Data\Input",in_Config("ServiceRevenueFilePath").ToString)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign sap2010:Annotation.AnnotationText="Assign Run Charts Input File path" DisplayName="Assign - Run Chart File" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="Assign_217">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[runChartFile]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[path.Combine(Environment.CurrentDirectory,"Data\Input",in_Config("ServiceRunChartsFilePath").ToString)]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <Assign sap2010:Annotation.AnnotationText="Assign Forecast File Input Path" DisplayName="Assign - Forecast File" sap:VirtualizedContainerService.HintSize="897,91" sap2010:WorkflowViewState.IdRef="Assign_218">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[forecastFile]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[path.Combine(Environment.CurrentDirectory,"Data\Input",in_Config("ForeCastReportFilePath").ToString)]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <Assign DisplayName="Assign Process Succesful" sap:VirtualizedContainerService.HintSize="897,60" sap2010:WorkflowViewState.IdRef="Assign_219">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Boolean">[processSuccesful]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Sequence DisplayName="readServiceRevenueData" sap:VirtualizedContainerService.HintSize="897,66" sap2010:WorkflowViewState.IdRef="Sequence_133">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:LogMessage DisplayName="Read US &amp; CAN in Service Revenue File" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_98" Level="Info" Message="[&quot;Reading ForeCast US and CANADA Values&quot;]" />
+      <ui:ReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read US Data from Service revenue File and place the data to data table" DataTable="[serviceRevenueUSDT]" DisplayName="Read Range - Reading Service Revenue Data" sap:VirtualizedContainerService.HintSize="334,129" sap2010:WorkflowViewState.IdRef="ReadRange_19" Range="[in_Config(&quot;USReadRange&quot;).ToString]" SheetName="[in_Config(&quot;ServiceReportSheetName4&quot;).ToString]" WorkbookPath="[serviceRevenueFile]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ReadRange>
+      <ui:ReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read Canada Data from Service revenue File and place the data to data table" DataTable="[serviceCanDT]" DisplayName="Read Range - Reading Service Revenue Data" sap:VirtualizedContainerService.HintSize="334,129" sap2010:WorkflowViewState.IdRef="ReadRange_20" Range="[in_Config(&quot;CANReadRange&quot;).ToString]" SheetName="[in_Config(&quot;ServiceReportSheetName4&quot;).ToString]" WorkbookPath="[serviceRevenueFile]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ReadRange>
+    </Sequence>
+    <ui:ExcelApplicationScope Password="{x:Null}" sap2010:Annotation.AnnotationText="This activity reads the list of sheets present in the runchart report" DisplayName="Open NA Service Revenue Run Charts" sap:VirtualizedContainerService.HintSize="897,254" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_6" Visible="False" WorkbookPath="[runChartFile]">
+      <ui:ExcelApplicationScope.Body>
+        <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Run Charts File" sap:VirtualizedContainerService.HintSize="242,114" sap2010:WorkflowViewState.IdRef="Sequence_134">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ExcelGetWorkbookSheets DisplayName="Get  Run Charts Workbook Sheets" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="ExcelGetWorkbookSheets_2" Sheets="[runchartSheetList]" />
+          </Sequence>
+        </ActivityAction>
+      </ui:ExcelApplicationScope.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ExcelApplicationScope>
+    <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="This activity finds if the worksheet name is present in the workbook" DisplayName="For Each - NA_SheetName" sap:VirtualizedContainerService.HintSize="897,557" sap2010:WorkflowViewState.IdRef="ForEach`1_7" Values="[runchartSheetList]">
+      <ui:ForEach.Body>
+        <ActivityAction x:TypeArguments="x:String">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:String" Name="NA_sheetName" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Inside Run Charts File" sap:VirtualizedContainerService.HintSize="526,392" sap2010:WorkflowViewState.IdRef="Sequence_136">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If Condition="[NA_sheetName.ToString.Equals(runChartTab)]" DisplayName="Checking SheetName Availability" sap:VirtualizedContainerService.HintSize="484,300" sap2010:WorkflowViewState.IdRef="If_51">
+              <If.Then>
+                <Sequence DisplayName="Sheet Name is Present" sap:VirtualizedContainerService.HintSize="304,152" sap2010:WorkflowViewState.IdRef="Sequence_135">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Assign- RunChart Sheet Present" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_220">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Boolean">[NASheetPresent]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </If.Then>
+            </If>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEach.Body>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ForEach>
+    <If Condition="[NASheetPresent]" DisplayName="Checking Current Month Sheet Avialibity" sap:VirtualizedContainerService.HintSize="897,2012" sap2010:WorkflowViewState.IdRef="If_52">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence DisplayName="Run Charts SheetName Present" sap:VirtualizedContainerService.HintSize="476,1864" sap2010:WorkflowViewState.IdRef="Sequence_140">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Run Charts SheetName" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_99" Level="Info" Message="[&quot;Current Month Sheet Name present in Run Charts: &quot;+runChartTab]" />
+          <Assign DisplayName="Assign - US " sap:VirtualizedContainerService.HintSize="434,60" sap2010:WorkflowViewState.IdRef="Assign_221">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[FindingUS]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[in_Config("USValue").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign - CAN" sap:VirtualizedContainerService.HintSize="434,60" sap2010:WorkflowViewState.IdRef="Assign_222">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[FindingCAN]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[in_Config("CANValue").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:ExcelApplicationScope Password="{x:Null}" sap2010:Annotation.AnnotationText="Reads all the data from the run chart tab and assigns it to the DataTable" DisplayName="Open - NA Service Revenue Run Charts" sap:VirtualizedContainerService.HintSize="434,291" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_7" Visible="False" WorkbookPath="[runChartFile]">
+            <ui:ExcelApplicationScope.Body>
+              <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Inside Run charts" sap:VirtualizedContainerService.HintSize="376,151" sap2010:WorkflowViewState.IdRef="Sequence_137">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:ExcelReadRange AddHeaders="False" DataTable="[runchartDT]" DisplayName="Read US Row" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="ExcelReadRange_6" SheetName="[runChartTab]">
+                    <ui:ExcelReadRange.Range>
+                      <InArgument x:TypeArguments="x:String">
+                        <Literal x:TypeArguments="x:String" Value="" />
+                      </InArgument>
+                    </ui:ExcelReadRange.Range>
+                  </ui:ExcelReadRange>
+                </Sequence>
+              </ActivityAction>
+            </ui:ExcelApplicationScope.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:ExcelApplicationScope>
+          <Assign sap2010:Annotation.AnnotationText="Get Data Row with US Value" DisplayName="Get US Data Row" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="Assign_223">
+            <Assign.To>
+              <OutArgument x:TypeArguments="sd:DataRow[]">[USRowDateItem]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="sd:DataRow[]">[(From n in runchartDT.Select Where n(0).ToString.Equals(FindingUS) Select n).ToArray]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <Assign sap2010:Annotation.AnnotationText="Get the row number where the value is US" DisplayName="Get Row number- US Data" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="Assign_224">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">[USRowNum]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(USRowDateItem(0))]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <ui:LogMessage DisplayName="US Row Number" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_100" Level="Info" Message="[&quot;US Row Number in Run Chats is :&quot;+USRowNum.ToString]" />
+          <Assign sap2010:Annotation.AnnotationText="Get Data Row with Canada Value" DisplayName="Get Canada Row" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="Assign_225">
+            <Assign.To>
+              <OutArgument x:TypeArguments="sd:DataRow[]">[CanRowDateItem]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="sd:DataRow[]">[(From n in runchartDT.Select Where n(0).ToString.Equals(FindingCAN) Select n).ToArray]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <Assign sap2010:Annotation.AnnotationText="Get the row number where the value is US" DisplayName="Get Row number- Canada Data" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="Assign_226">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">[CanRowNum]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(CanRowDateItem(0))]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <ui:LogMessage DisplayName="CAN Row Number" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_101" Level="Info" Message="[&quot;CAN Row Nmber in Run Charts File :&quot;+CanRowNum.ToString]" />
+          <Assign sap2010:Annotation.AnnotationText="Get the row numbers where the date value is current date" DisplayName="Find Rows with value Current Date" sap:VirtualizedContainerService.HintSize="434,102" sap2010:WorkflowViewState.IdRef="Assign_227">
+            <Assign.To>
+              <OutArgument x:TypeArguments="sd:DataRow[]">[FindDataItem]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="sd:DataRow[]">[(From n in runchartDT.Select Where n(0).ToString.Contains(currentDate) Select n).ToArray]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <ui:LogMessage DisplayName="Current Date in Run Charts" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_102" Level="Info" Message="[&quot;Current Date Row Numbers in Run Charts : &quot;+FindDataItem.ToString]" />
+          <TryCatch DisplayName="Try businessday Presence" sap:VirtualizedContainerService.HintSize="434,51" sap2010:WorkflowViewState.IdRef="TryCatch_8">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <TryCatch.Try>
+              <Sequence DisplayName="US and CAn date row Numbers" sap:VirtualizedContainerService.HintSize="376,598" sap2010:WorkflowViewState.IdRef="Sequence_138">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign sap2010:Annotation.AnnotationText="Get First Row number having Current Dates" DisplayName="Get US Row number having Current Dates" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_228">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[currentDateRowUS]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(FindDataItem(0))]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+                <ui:LogMessage DisplayName="Curent date in US data Table" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_103" Level="Info" Message="[&quot;Current Date Row Number in US datatable is: &quot;+currentDateRowUS.ToString]" />
+                <Assign sap2010:Annotation.AnnotationText="Get Second Row number having Current Dates" DisplayName="Get CAN Row Number having Current Date" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_229">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[currentDateRowCan]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(FindDataItem(1))]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+                <ui:LogMessage DisplayName="Current date in CAN data table" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_104" Level="Info" Message="[&quot;Current Date Row Number in CAN Data Table is: &quot;+currentDateRowCan.ToString]" />
+              </Sequence>
+            </TryCatch.Try>
+            <TryCatch.Catches>
+              <Catch x:TypeArguments="s:IndexOutOfRangeException" sap:VirtualizedContainerService.HintSize="404,21" sap2010:WorkflowViewState.IdRef="Catch`1_9">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ActivityAction x:TypeArguments="s:IndexOutOfRangeException">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="s:IndexOutOfRangeException" Name="exception" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="business day not Present" sap:VirtualizedContainerService.HintSize="376,468" sap2010:WorkflowViewState.IdRef="Sequence_139">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:LogMessage DisplayName="Business day not Present" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_105" Level="Error" Message="[&quot;Business date not present&quot;]" />
+                    <Assign DisplayName="ProcessSucceful is False" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_230">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Boolean">[processSuccesful]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Hi,&lt;br&gt;&lt;br&gt;Service Report Automation didn't process the Service Revenue Dashboard file because &quot;+currentDate+&quot; is not Present as business day in Run Charts File.&lt;br&gt;&lt;br&gt;Regards&lt;br&gt;ServiceReport_Dispatcher_VTI&quot;]" DisplayName="Send Business Day not present Email to Functional Team" EnableSSL="True" From="[in_Config(&quot;ServiceReport_SharedMailAccount&quot;).ToString]" sap:VirtualizedContainerService.HintSize="334,145" sap2010:WorkflowViewState.IdRef="SendMail_25" IsBodyHtml="True" Port="[CINT(in_Config(&quot;SMTP_Port&quot;).ToString)]" SecureConnection="Auto" Server="[in_Config(&quot;SMTPServer&quot;).ToString]" Subject="[currentDate+&quot;-&quot;+&quot;Business date not Present&quot;+&quot;-&quot;+in_Config(&quot;MailSubProjectName&quot;).ToString]" To="[in_Config(&quot;ServiceReport_BotErrorDL&quot;).ToString]">
+                      <ui:SendMail.Files>
+                        <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                      </ui:SendMail.Files>
+                    </ui:SendMail>
+                  </Sequence>
+                </ActivityAction>
+              </Catch>
+            </TryCatch.Catches>
+          </TryCatch>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Run Charts Sheet Name is not Present" sap:VirtualizedContainerService.HintSize="376,468" sap2010:WorkflowViewState.IdRef="Sequence_141">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Run charts SheetName not Present" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_106" Level="Error" Message="[&quot;Current Month Sheet Name not Available in Run Charts File: &quot;+runChartTab]" />
+          <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Hi, &lt;br&gt;&lt;br&gt;Service Report Automation was not able to process the Service Revenue Dashboard file because &quot;+runChartTab+&quot; sheet is not present in Run Charts File&lt;br&gt;&lt;br&gt;Regards&lt;br&gt;ServiceReport_Dispatcher_VTI&quot;]" DisplayName="Send Run Charts Tab not present Mail to Functional team" EnableSSL="True" From="[in_Config(&quot;ServiceReport_SharedMailAccount&quot;).ToString]" sap:VirtualizedContainerService.HintSize="334,145" sap2010:WorkflowViewState.IdRef="SendMail_26" IsBodyHtml="True" Port="[CINT(in_Config(&quot;SMTP_Port&quot;).ToString)]" SecureConnection="Auto" Server="[in_Config(&quot;SMTPServer&quot;).ToString]" Subject="[runChartTab+&quot;-&quot;+&quot;SheetName not Present&quot;+&quot;-&quot;+in_Config(&quot;MailSubProjectName&quot;).ToString]" To="[in_Config(&quot;ServiceReport_BotErrorDL&quot;).ToString]">
+            <ui:SendMail.Files>
+              <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+            </ui:SendMail.Files>
+          </ui:SendMail>
+          <Assign DisplayName="Assign -ProcessSuccesful False" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_231">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Boolean">[processSuccesful]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </If.Else>
+    </If>
+    <If Condition="[processSuccesful]" DisplayName="If - Process is Successful" sap:VirtualizedContainerService.HintSize="897,2688" sap2010:WorkflowViewState.IdRef="If_58">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence DisplayName="Populate Run Charts" sap:VirtualizedContainerService.HintSize="613,2540" sap2010:WorkflowViewState.IdRef="Sequence_152">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Assign sap2010:Annotation.AnnotationText="Get Previous Business Day" DisplayName="Get Previous Business Day" sap:VirtualizedContainerService.HintSize="571,91" sap2010:WorkflowViewState.IdRef="Assign_232">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[businessDate]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[runchartDT.Rows(currentDateRowUS - 1).Item(0).ToString]</InArgument>
+            </Assign.Value>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </Assign>
+          <If sap2010:Annotation.AnnotationText="If the date is first business day of the month point to change variables to point previous month tab and last entries of the tab" Condition="[(currentDateRowUS - USRowNum) = 2]" DisplayName="If - business day first day of Month" sap:VirtualizedContainerService.HintSize="621,1692" sap2010:WorkflowViewState.IdRef="If_53">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If.Then>
+              <Sequence DisplayName="Populate Values to Previous Run charts tab" sap:VirtualizedContainerService.HintSize="476,1502" sap2010:WorkflowViewState.IdRef="Sequence_143">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="Assign Prev Month to Sheet Tab Name" sap:VirtualizedContainerService.HintSize="434,60" sap2010:WorkflowViewState.IdRef="Assign_233">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[runChartTab]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[DateTime.ParseExact("01"+runChartTab,"ddMMMyyyy",system.Globalization.CultureInfo.InvariantCulture).AddMonths(-1).toString("MMMyyyy")]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="previous Month Run Chart Tab" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_107" Level="Info" Message="[&quot;Previous Month Run Charts Tab Name is :&quot;+runChartTab]" />
+                <ui:ExcelApplicationScope Password="{x:Null}" sap2010:Annotation.AnnotationText="This Activity will open Run Charts File" DisplayName="Open - NA Service Revenue Run Charts" sap:VirtualizedContainerService.HintSize="434,291" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_8" Visible="False" WorkbookPath="[runChartFile]">
+                  <ui:ExcelApplicationScope.Body>
+                    <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                      </ActivityAction.Argument>
+                      <Sequence DisplayName="Do - run charts" sap:VirtualizedContainerService.HintSize="376,151" sap2010:WorkflowViewState.IdRef="Sequence_142">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:ExcelReadRange AddHeaders="False" DataTable="[runchartDT]" DisplayName="Read US Row" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="ExcelReadRange_7" SheetName="[runChartTab]">
+                          <ui:ExcelReadRange.Range>
+                            <InArgument x:TypeArguments="x:String">
+                              <Literal x:TypeArguments="x:String" Value="" />
+                            </InArgument>
+                          </ui:ExcelReadRange.Range>
+                        </ui:ExcelReadRange>
+                      </Sequence>
+                    </ActivityAction>
+                  </ui:ExcelApplicationScope.Body>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:ExcelApplicationScope>
+                <Assign DisplayName="Assign - Previous Month Data" sap:VirtualizedContainerService.HintSize="434,60" sap2010:WorkflowViewState.IdRef="Assign_234">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="sd:DataRow[]">[prevMonthData]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="sd:DataRow[]">[(From n In runchartDT.Select Where n(0).ToString.Contains(DateTime.Now.AddMonths(-1).ToString("MM")+"/") Select n).ToArray]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <Assign DisplayName="Assign -Last Business Day in Previous Month" sap:VirtualizedContainerService.HintSize="434,60" sap2010:WorkflowViewState.IdRef="Assign_235">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[lastBusinessDayPrevMon]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[prevMonthData(prevMonthData.Length-1).Item(0).ToString]</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:LogMessage DisplayName="Last Business Day in Previous Month" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="LogMessage_108" Level="Info" Message="[&quot;Last Business Day in Previous Month :&quot;+lastBusinessDayPrevMon]" />
+                <Assign sap2010:Annotation.AnnotationText="Get the row numbers where the date value is current date" DisplayName="Find Rows with Previous Business Day" sap:VirtualizedContainerService.HintSize="434,102" sap2010:WorkflowViewState.IdRef="Assign_236">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="sd:DataRow[]">[FindDataItem]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="sd:DataRow[]">[(From n in runchartDT.Select Where n(0).ToString.Equals(lastBusinessDayPrevMon) Select n).ToArray]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+                <Assign sap2010:Annotation.AnnotationText="Get First Row number having Current Dates" DisplayName="Get US Row number having Current Dates" sap:VirtualizedContainerService.HintSize="434,102" sap2010:WorkflowViewState.IdRef="Assign_237">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[currentDateRowUS]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(FindDataItem(0))+1]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+                <Assign sap2010:Annotation.AnnotationText="Get Second Row number having Current Dates" DisplayName="Get CAN Row Number having Current Date" sap:VirtualizedContainerService.HintSize="434,102" sap2010:WorkflowViewState.IdRef="Assign_238">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">[currentDateRowCan]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">[runchartDT.Rows.IndexOf(FindDataItem(1))+1]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+                <Assign sap2010:Annotation.AnnotationText="Get Previous Business Day" DisplayName="Get Previous Business Day" sap:VirtualizedContainerService.HintSize="434,91" sap2010:WorkflowViewState.IdRef="Assign_239">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:String">[businessDate]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[runchartDT.Rows(currentDateRowUS - 1).Item(0).ToString]</InArgument>
+                  </Assign.Value>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </Assign>
+              </Sequence>
+            </If.Then>
+          </If>
+          <Assign DisplayName="Assign -business Date as Out Arg" sap:VirtualizedContainerService.HintSize="571,60" sap2010:WorkflowViewState.IdRef="Assign_250">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:String">[out_businessDate]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[businessDate]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Write to Run Charts File" sap:VirtualizedContainerService.HintSize="571,91" sap2010:WorkflowViewState.IdRef="LogMessage_109" Level="Info" Message="[&quot;Writing to the run chart file&quot;]" />
+          <ui:ExcelApplicationScope Password="{x:Null}" sap2010:Annotation.AnnotationText="Write the values got from the service dashboard to run chart file and get the data needed for the forecast file " DisplayName="Write to run Chart File - Excel Application Scope" sap:VirtualizedContainerService.HintSize="571,1001" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_9" Visible="False" Workbook="[excelWB]" WorkbookPath="[runChartFile]">
+            <ui:ExcelApplicationScope.Body>
+              <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Write into Run Charts" sap:VirtualizedContainerService.HintSize="376,850" sap2010:WorkflowViewState.IdRef="Sequence_144">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:ExcelWriteRange AddHeaders="False" DataTable="[serviceRevenueUSDT]" DisplayName="Write US Data - Write Range" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_3" SheetName="[runChartTab]" StartingCell="[&quot;C&quot; + currentDateRowUS.ToString + &quot;:F&quot; + currentDateRowUS.ToString]" />
+                  <ui:ExcelWriteRange AddHeaders="False" DataTable="[serviceCanDT]" DisplayName="Write Canada Data - Write Range" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="ExcelWriteRange_4" SheetName="[runChartTab]" StartingCell="[&quot;C&quot; + currentDateRowCan.ToString + &quot;:F&quot; + currentDateRowCan.ToString]" />
+                  <ui:ExcelSaveWorkbook DisplayName="Save Service dashboard workbook" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="ExcelSaveWorkbook_5" />
+                  <ui:ExcelReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read the US delta data populated to the run chart file after updating the actuals data to the file" DataTable="[runChartUSOutputDT]" DisplayName="Read the US Data - Read Range" sap:VirtualizedContainerService.HintSize="334,101" sap2010:WorkflowViewState.IdRef="ExcelReadRange_8" Range="[&quot;J&quot; + currentDateRowUS.ToString + &quot;:M&quot; + currentDateRowUS.ToString]" SheetName="[runChartTab]">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ExcelReadRange>
+                  <Assign DisplayName="Assign -US Run Charts Data Table Out Arg" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_251">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="sd:DataTable">[out_runChartUSOutputDT]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="sd:DataTable">[runChartUSOutputDT]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:ExcelReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read the Canada delta data populated to the run chart file after updating the actuals data to the file" DataTable="[runChartCanOutputDT]" DisplayName="Read the Canada Data - Read Range" sap:VirtualizedContainerService.HintSize="334,101" sap2010:WorkflowViewState.IdRef="ExcelReadRange_9" Range="[&quot;J&quot; + currentDateRowCan.ToString + &quot;:M&quot; + currentDateRowCan.ToString]" SheetName="[runChartTab]">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                  </ui:ExcelReadRange>
+                  <Assign DisplayName="Assign- Canada Run charts Data out Arg" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_252">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="sd:DataTable">[out_runChartCanOutputDT]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="sd:DataTable">[runChartCanOutputDT]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </ActivityAction>
+            </ui:ExcelApplicationScope.Body>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:ExcelApplicationScope>
+          <ui:ExcelCloseWorkbook DisplayName="Close Service file" sap:VirtualizedContainerService.HintSize="571,59" sap2010:WorkflowViewState.IdRef="ExcelCloseWorkbook_13" Workbook="[excelWB]" />
+          <If Condition="[cint(runChartUSOutputDT.Rows(0).Item(0).ToString)=0]" DisplayName="Checking US contract Value" sap:VirtualizedContainerService.HintSize="571,677" sap2010:WorkflowViewState.IdRef="If_54">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If.Then>
+              <Sequence DisplayName="US Contract is Zero" sap:VirtualizedContainerService.HintSize="426,529" sap2010:WorkflowViewState.IdRef="Sequence_145">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:String" Name="usContractExpMailBody" />
+                </Sequence.Variables>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="Process Succesful" sap:VirtualizedContainerService.HintSize="384,60" sap2010:WorkflowViewState.IdRef="Assign_240">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[processSuccesful]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:ReadTextFile sap2010:Annotation.AnnotationText="Reading US Contract Value Zero Exception Mail Body" Content="[usContractExpMailBody]" DisplayName="Read US Contract Zero Mail Body" FileName="[in_Config(&quot;USContractZeroExpMailBody&quot;).ToString]" sap:VirtualizedContainerService.HintSize="384,110" sap2010:WorkflowViewState.IdRef="ReadTextFile_11">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:ReadTextFile>
+                <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" sap2010:Annotation.AnnotationText="Sending mail to BI support Team The US Contract Value Zero" Body="[usContractExpMailBody]" DisplayName="Send SMTP Mail-Contract US Value Zero" EnableSSL="True" From="[in_Config(&quot;ServiceReport_SharedMailAccount&quot;).ToString]" sap:VirtualizedContainerService.HintSize="384,187" sap2010:WorkflowViewState.IdRef="SendMail_27" IsBodyHtml="True" Port="[CINT(in_Config(&quot;SMTP_Port&quot;).ToString)]" SecureConnection="Auto" Server="[in_Config(&quot;SMTPServer&quot;).ToString]" Subject="[in_Config(&quot;ContractValidate&quot;).ToString]" To="[in_Config(&quot;DataIssues_ErrorDL&quot;).ToString]">
+                  <ui:SendMail.Files>
+                    <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                  </ui:SendMail.Files>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:SendMail>
+              </Sequence>
+            </If.Then>
+          </If>
+          <If Condition="[cint(runChartCanOutputDT.Rows(0).Item(0).ToString)=0]" DisplayName="Checking CAN Contract Value" sap:VirtualizedContainerService.HintSize="571,51" sap2010:WorkflowViewState.IdRef="If_55">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <If.Then>
+              <Sequence DisplayName="CAN Contract Value is Zero" sap:VirtualizedContainerService.HintSize="426,529" sap2010:WorkflowViewState.IdRef="Sequence_146">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:String" Name="canContractZeroMailBody" />
+                </Sequence.Variables>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <Assign DisplayName="ProcessSuccesful" sap:VirtualizedContainerService.HintSize="384,60" sap2010:WorkflowViewState.IdRef="Assign_241">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Boolean">[processSuccesful]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                  </Assign.Value>
+                </Assign>
+                <ui:ReadTextFile sap2010:Annotation.AnnotationText="Reading CAN Contract Value Zero Exception Mail Body" Content="[canContractZeroMailBody]" DisplayName="Read CAN Contract Zero Exp Mail Body" FileName="[in_Config(&quot;CANContractZeroExpMailBody&quot;).ToString]" sap:VirtualizedContainerService.HintSize="384,110" sap2010:WorkflowViewState.IdRef="ReadTextFile_12">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:ReadTextFile>
+                <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" Email="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" Password="{x:Null}" TimeoutMS="{x:Null}" sap2010:Annotation.AnnotationText="Sending mail to BI support Team The CAN Contract Value Zero" Body="[canContractZeroMailBody]" DisplayName="Send SMTP Mail-CAN Contract Value Zero" EnableSSL="True" From="[in_Config(&quot;ServiceReport_SharedMailAccount&quot;).ToString]" sap:VirtualizedContainerService.HintSize="384,187" sap2010:WorkflowViewState.IdRef="SendMail_28" IsBodyHtml="True" Port="[CINT(in_Config(&quot;SMTP_Port&quot;).ToString)]" SecureConnection="Auto" Server="[in_Config(&quot;SMTPServer&quot;).ToString]" Subject="[in_Config(&quot;ContractValidate&quot;).ToString]" To="[in_Config(&quot;DataIssues_ErrorDL&quot;).ToString]">
+                  <ui:SendMail.Files>
+                    <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                  </ui:SendMail.Files>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:SendMail>
+              </Sequence>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Then>
+    </If>
+  </Sequence>
+</Activity>

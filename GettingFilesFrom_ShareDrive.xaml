@@ -1,0 +1,607 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="GettingFilesFrom_ShareDrive" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_OffsetsFileName" Type="OutArgument(x:String)" />
+    <x:Property Name="out_FSMForecastFileName" Type="OutArgument(x:String)" />
+    <x:Property Name="out_UnitAddsMTDFileName" Type="OutArgument(x:String)" />
+    <x:Property Name="out_MTDShareDrivePath" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>960,6737</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>GettingFilesFrom_ShareDrive_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="28">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>System.Globalization</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="26">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="GettingFilesFrom_ShareDrive" sap:VirtualizedContainerService.HintSize="376,6632" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="ForeCastSharePath" />
+      <Variable x:TypeArguments="x:String" Name="ServiceRunChartsSharePath" />
+      <Variable x:TypeArguments="x:String" Name="fiscalFilePath" />
+      <Variable x:TypeArguments="x:String" Name="fsmFileName" />
+      <Variable x:TypeArguments="x:String" Name="fiscalMonth" />
+      <Variable x:TypeArguments="x:String" Name="currentDate" />
+      <Variable x:TypeArguments="sd:DataTable" Name="fiscalLookupDataTable" />
+      <Variable x:TypeArguments="sd:DataRow[]" Name="findCurrentDate" />
+      <Variable x:TypeArguments="x:String" Name="FSMFiscalMonth" />
+      <Variable x:TypeArguments="x:String" Name="offSetsMonth" />
+      <Variable x:TypeArguments="x:String" Name="offSetsFolderMonth" />
+      <Variable x:TypeArguments="x:String" Name="offSetsFolder" />
+      <Variable x:TypeArguments="x:String" Name="offSetsYear" />
+      <Variable x:TypeArguments="x:String" Name="OffSetsFileShareDrivePath" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="forecastFileexists" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="runChartsfileExists" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="fiscalFileExists" />
+      <Variable x:TypeArguments="x:String" Name="FSMFiscalForecastFilePath" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="FSMForecastFileexists" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="OffSetsPathexists" />
+      <Variable x:TypeArguments="x:String" Name="OffsetsFileName" />
+      <Variable x:TypeArguments="x:String" Name="FSMForecastFileName" />
+      <Variable x:TypeArguments="x:String" Name="UnitAddsMTDShareDrivepath" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="UnitAddsMTDFileExists" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message - Getting Share drive Files" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Getting Files From Share Drive&quot;]" />
+    <Assign sap2010:Annotation.AnnotationText="Assign Forecast File Share drive Path&#xA;" DisplayName="Assign ForeCast ShareDrive Path" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[ForeCastSharePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("ForeCastJDriveBotPath").ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message - ForeCast File Share Path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_28" Level="Info" Message="[&quot;Forecast File Share drive Path is : &quot;+ForeCastSharePath.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Assign Run Charts Share Drive Path" DisplayName="Assign Run Charts ShareDrive Path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[ServiceRunChartsSharePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("RunChartsJDriveBotpath").ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message - Run Charts Share Drive path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_29" Level="Info" Message="[&quot;Run Charts Share Drive Path is : &quot;+ServiceRunChartsSharePath.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Assign Fiscla Calender Share drive Path" DisplayName="Assign - Fiscal CalenderFile path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="Assign_5">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[fiscalFilePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("ServiceReport_FiscalLookUp").ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message - Fiscal Lookup Share Drive Path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_30" Level="Info" Message="[&quot;Fiscal calender lookup file share drive path is : &quot;+fiscalFilePath.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Assign FSM Fiscal Forecast Share Drive path" DisplayName="Assign - FSM Fiscal Forecast File name" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_6">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[fsmFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("FSMFileName").ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <Assign sap2010:Annotation.AnnotationText="Assign Current Date" DisplayName="Assign - Current Date" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="Assign_8">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[currentDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[DateTime.Now.ToString("MM/dd/yyyy")]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Current Date" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;Today's Date : &quot;+currentDate]" />
+    <ui:ReadRange AddHeaders="False" sap2010:Annotation.AnnotationText="Read Fiscal Lookup File to get the Run Charts tab" DataTable="[fiscalLookupDataTable]" DisplayName="Read Fiscal Lookup File" sap:VirtualizedContainerService.HintSize="334,118" sap2010:WorkflowViewState.IdRef="ReadRange_1" SheetName="[in_Config(&quot;ServiceReportSheetName3&quot;).ToString]" WorkbookPath="[fiscalFilePath]">
+      <ui:ReadRange.Range>
+        <InArgument x:TypeArguments="x:String">
+          <Literal x:TypeArguments="x:String" Value="" />
+        </InArgument>
+      </ui:ReadRange.Range>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:ReadRange>
+    <Assign sap2010:Annotation.AnnotationText="Get the rows which the value has current date" DisplayName="Assign Current Date Row" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_9">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataRow[]">[findCurrentDate]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataRow[]">[(From n in fiscalLookupDataTable.Select Where n(0).ToString.Contains(currentDate) Select n).ToArray]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Current date in Fiscal File" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[findCurrentDate.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Get the Rows which the value has Curent date corresponding Fiscal Month" DisplayName="Assign Fiscal Month Row" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_10">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[fiscalMonth]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[findCurrentDate(0).Item(1).ToString]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <ui:LogMessage DisplayName="Fiscal Month Value" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;Current Month for Current Date :&quot;+fiscalMonth.ToString]" />
+    <Assign sap2010:Annotation.AnnotationText="Assign Fiscal Month" DisplayName="Assign- Fiscal Month" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="Assign_7">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[FSMFiscalMonth]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Mid(fiscalMonth,1,3)+ Mid(fiscalMonth,5,2)]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <Assign sap2010:Annotation.AnnotationText="Assign FSM FileName&#xA;" DisplayName="Assign - FSM forecast FileName" sap:VirtualizedContainerService.HintSize="334,102" sap2010:WorkflowViewState.IdRef="Assign_20">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[FSMForecastFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[FSMFiscalMonth+" "+fsmFileName]</InArgument>
+      </Assign.Value>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Assign>
+    <Assign DisplayName="Assign -Out FSM FileName" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_21">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_FSMForecastFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[FSMForecastFileName]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="FSM Fiscal Month" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;FSM Fiscal Month : &quot;+FSMFiscalMonth]" />
+    <Assign DisplayName="Assign - Offsets Year Folder" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_14">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[offSetsYear]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">["20"+Mid(fiscalMonth,5,2)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -Off Sets year Folder" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;Off Sets Year folder Name : &quot;+offSetsYear]" />
+    <Assign DisplayName="Assign -offSets Month" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_11">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[offSetsMonth]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Mid(fiscalMonth,1,3)]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -Off sets Month" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;OffSets Month : &quot;+offSetsMonth]" />
+    <Assign DisplayName="Assign -Offsets File Name" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_17">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[OffsetsFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[offSetsMonth+" "+offSetsYear+" "+in_Config("OffSetsFile").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign -Out Offsets FileName" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_19">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_OffsetsFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[OffsetsFileName]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign- offSets Month in MMMM" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[offSetsFolderMonth]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Datetime.ParseExact(offSetsMonth,"MMM", System.Globalization.CultureInfo.InvariantCulture).ToString("MMM")]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -OffSets Month in MMMM" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;Off Sets Folder Month in MMM format is : &quot;+offSetsFolderMonth]" />
+    <Assign DisplayName="Assign- Offsets Folder in MM format" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_13">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[offSetsFolder]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[Datetime.ParseExact(offSetsMonth,"MMM", System.Globalization.CultureInfo.InvariantCulture).ToString("%M")]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message- OffSets Folder in MM" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;Off Sets Month in MM format is : &quot;+offSetsFolder]" />
+    <Assign DisplayName="Assign - Offsets File Share Drive path" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[OffSetsFileShareDrivePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("OffSetsShareDrivePath").ToString+offSetsYear+"\"+offSetsFolder+" "+offSetsFolderMonth+"\"+offSetsMonth+" "+offSetsYear+" "+in_Config("OffSetsFile").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -OffSets Share Drive path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[&quot;Off Sets File Share Drive Path is : &quot;+OffSetsFileShareDrivePath]" />
+    <Assign DisplayName="Assign -Unit Adds MTD Share drive path" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_22">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[UnitAddsMTDShareDrivepath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("OffSetsShareDrivePath").ToString+offSetsYear+"\"+offSetsFolder+" "+offSetsFolderMonth+"\"+in_Config("MTDShareDriveFileName").ToString+"_"+offSetsMonth+Mid(fiscalMonth,5,2)+".xlsx"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -Unit Adds Share Drive Path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_36" Level="Info" Message="[&quot;Unit Adds MTD Share drive path is : &quot;+UnitAddsMTDShareDrivepath]" />
+    <Assign sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_24">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_MTDShareDrivePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[UnitAddsMTDShareDrivepath]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign -Out MTD File Name" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_23">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[out_UnitAddsMTDFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("MTDShareDriveFileName").ToString+"_"+offSetsMonth+Mid(fiscalMonth,5,2)+".xlsx"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message -Out MTD File Name" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_40" Level="Info" Message="[&quot;Out Unit Adds MTD File Name is : &quot;+out_UnitAddsMTDFileName]" />
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity will check Forecast File Exists" DisplayName="Path Exists -Forecast File" Exists="[forecastFileexists]" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="PathExists_1" Path="[ForeCastSharePath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="&#xA;This Activity will check Forecast File Exists or Not" Condition="[forecastFileexists]" DisplayName="If - forecast File exists" sap:VirtualizedContainerService.HintSize="334,108" sap2010:WorkflowViewState.IdRef="If_1">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting Forecast File to Bot input Folder" DisplayName="Sequence - Forecast File present in Sharedrive" sap:VirtualizedContainerService.HintSize="426,584" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Copy Forecast file to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[path.Combine(Environment.CurrentDirectory,&quot;Data\Input&quot;)]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Description: Copy input ForeCast File From J drive to bot input Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;ForeCastReportFilePath&quot;).ToString)]" DisplayName="Copy ForeCast File to Current Input Folder" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_8" Overwrite="True" Path="[ForeCastSharePath]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:CopyFile>
+          <ui:LogMessage DisplayName="Log Message - Forecast File Copied to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_31" Level="Info" Message="[&quot;Forecast File Copied to bot Input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence -Forecast file not exists in Sharedrive" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Forecast file not exists" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Error" Message="[&quot;Forecast File not exist&quot;]" />
+          <Throw DisplayName="Throw - forecast file not present" Exception="[new BusinessRuleException(&quot;Forecast File not present in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_1" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity will check Run Charts File Exists" DisplayName="Path Exists - Run Charts" Exists="[runChartsfileExists]" sap:VirtualizedContainerService.HintSize="334,120" sap2010:WorkflowViewState.IdRef="PathExists_2" Path="[ServiceRunChartsSharePath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="This Activity will check Run Charts File Exists or not" Condition="[runChartsfileExists]" DisplayName="If - Run Charts File Exists" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="If_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting Run Charts File to Bot input Folder" DisplayName="Sequence - run Charts File Exists" sap:VirtualizedContainerService.HintSize="426,584" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Copy Run Charts File to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_21" Level="Info" Message="[path.Combine(Environment.CurrentDirectory,&quot;Data\Input&quot;)]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Description: Copy Run Charts File From J drive to Bot Input Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;ServiceRunChartsFilePath&quot;).ToString)]" DisplayName="Copy Run Charts File to Current Input Folder" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_9" Overwrite="True" Path="[ServiceRunChartsSharePath]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:CopyFile>
+          <ui:LogMessage DisplayName="Log Message -Run Charts File Copied to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_32" Level="Info" Message="[&quot;NA Service Revenue Run Charts File Copied to Bot Input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence - Run Charts not exists" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Run Charts not present" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_22" Level="Error" Message="[&quot;NA Service Revenue Run Charts File not Exists&quot;]" />
+          <Throw DisplayName="Throw - Run Charts not exists" Exception="[new BusinessRuleException(&quot;NA Service Revenue Run Charts File not present in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_2" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity WIll check Fiscal Calender file exists" DisplayName="Path Exists- Fiscal Lookup File" Exists="[fiscalFileExists]" sap:VirtualizedContainerService.HintSize="334,120" sap2010:WorkflowViewState.IdRef="PathExists_3" Path="[fiscalFilePath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="This Actvity will check Fiscal calender file exists or not" Condition="[fiscalFileExists]" DisplayName="If - Fiscal Lookup file Exist" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="If_3">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting Fiscal Calender File to Bot input Folder" DisplayName="Sequence - fiscal file Exist" sap:VirtualizedContainerService.HintSize="426,542" sap2010:WorkflowViewState.IdRef="Sequence_6">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Copy Fiscal lookup file to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_23" Level="Info" Message="[&quot;Copying Fiscal Caleder lookup file to input folder&quot;]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;FiscalLookupFileName&quot;).ToString)]" DisplayName="Copy Fiscal Lookup File to input folder" sap:VirtualizedContainerService.HintSize="384,157" sap2010:WorkflowViewState.IdRef="CopyFile_10" Overwrite="True" Path="[fiscalFilePath]" />
+          <ui:LogMessage DisplayName="Log Message -Fiscal File Copied to Bot Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_33" Level="Info" Message="[&quot;Fiscal Lookup File Copied to Bot input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence - Fiscal file not present" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Fiscal Calender Lookup File not exists" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Error" Message="[&quot;Fiscal LookUp File Not Present in Share drive&quot;]" />
+          <Throw DisplayName="Throw - Fiscal Lookup File not Exists" Exception="[new BusinessRuleException(&quot;Fiscal Lookup file does not exists in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_3" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <Assign DisplayName="Assign - Fiscal Forecast" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_16">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[FSMFiscalForecastFilePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("ServiceReport_Automation_ShareDrive").ToString+"\"+FSMFiscalMonth+" "+fsmFileName]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:LogMessage DisplayName="Log Message - FSM file Path" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_26" Level="Info" Message="[FSMFiscalForecastFilePath]" />
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity will check FSM Fiscal Forecast File Exists" DisplayName="Path Exists -FSM Fiscal Forecast" Exists="[FSMForecastFileexists]" sap:VirtualizedContainerService.HintSize="334,120" sap2010:WorkflowViewState.IdRef="PathExists_4" Path="[FSMFiscalForecastFilePath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="This Activity will check FSM Fiscal Forecast File Exists or Not" Condition="[FSMForecastFileexists]" DisplayName="If- FSM fiscal File Path" sap:VirtualizedContainerService.HintSize="334,108" sap2010:WorkflowViewState.IdRef="If_4">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting FSM Fiscal Forecast File to Bot input Folder" DisplayName="Sequence - FSM Forecast File exists" sap:VirtualizedContainerService.HintSize="426,553" sap2010:WorkflowViewState.IdRef="Sequence_8">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message -Copy FSM Fiscal Forecast to input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Copy FSM Fiscal Forecast File to Input Folder&quot;]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,FSMFiscalMonth+&quot; &quot;+fsmFileName)]" DisplayName="Copy FSM Fiscal Forecast File to Input Folder" sap:VirtualizedContainerService.HintSize="384,157" sap2010:WorkflowViewState.IdRef="CopyFile_6" Overwrite="True" Path="[FSMFiscalForecastFilePath]" />
+          <ui:LogMessage DisplayName="Log Message -FSM Forecast File copied to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_34" Level="Info" Message="[&quot;FSM Fiscal Forecast File Copied to Bot input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence - FSM Fiscal Forecast file not present" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Fiscal Lookup File not exists" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Error" Message="[&quot;FSM Fiscal Forecast File Not Present in Share drive&quot;]" />
+          <Throw DisplayName="Throw - FSM Fiscal Forecast File not Exists" Exception="[new BusinessRuleException(&quot;FSM Fiscal Forecast file does not exists in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_4" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity will check Offsets File Exists" DisplayName="Path Exists- Off Sets File Path" Exists="[OffSetsPathexists]" sap:VirtualizedContainerService.HintSize="334,120" sap2010:WorkflowViewState.IdRef="PathExists_5" Path="[OffSetsFileShareDrivePath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="This Activity will check Offsets File Exists or Not" Condition="[OffSetsPathexists]" DisplayName="If -Off Sets File Path" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="If_5">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting OffSets File to Bot input Folder" DisplayName="Sequence -Off Sets Path Exists" sap:VirtualizedContainerService.HintSize="426,542" sap2010:WorkflowViewState.IdRef="Sequence_10">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - copy offSets file to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Info" Message="[&quot;Copy FSM offSets File into Input Folder&quot;]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,offSetsMonth+&quot; &quot;+offSetsYear+&quot; &quot;+in_Config(&quot;OffSetsFile&quot;).ToString)]" DisplayName="Copy -OffSets File to Input folder" sap:VirtualizedContainerService.HintSize="384,157" sap2010:WorkflowViewState.IdRef="CopyFile_7" Overwrite="True" Path="[OffSetsFileShareDrivePath]" />
+          <ui:LogMessage DisplayName="Log Message -Offsets File Copied to Bot Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_35" Level="Info" Message="[&quot;OffSets File Copied to Bot Input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence - Off Sets file not present" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_11">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Off Sets File not exists" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Error" Message="[&quot;Off Sets File Not Present in Share drive&quot;]" />
+          <Throw DisplayName="Throw - OffSets File not Exists" Exception="[new BusinessRuleException(&quot;Off Sets file does not exists in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_5" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:PathExists sap2010:Annotation.AnnotationText="This Activity will check Unit Adds MTD File Exists" DisplayName="Path Exists -Unit Adds MTD File" Exists="[UnitAddsMTDFileExists]" sap:VirtualizedContainerService.HintSize="334,120" sap2010:WorkflowViewState.IdRef="PathExists_6" Path="[UnitAddsMTDShareDrivepath]" PathType="File">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:PathExists>
+    <If sap2010:Annotation.AnnotationText="This Activity will check Unit Adds MTD File Exists or Not" Condition="[UnitAddsMTDFileExists]" DisplayName="If -Unit Adds MTD File" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="If_6">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <Sequence sap2010:Annotation.AnnotationText="This Activity will perform Getting Unit Adds MTD File to Bot input Folder" DisplayName="Sequence -Unit Adds MTD File Exists" sap:VirtualizedContainerService.HintSize="426,542" sap2010:WorkflowViewState.IdRef="Sequence_12">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - copy Unit Adds MTD file to Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_37" Level="Info" Message="[&quot;Copy Unit Adds MTD File into Input Folder&quot;]" />
+          <ui:CopyFile ContinueOnError="{x:Null}" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;MTDShareDriveFileName&quot;).ToString+&quot;_&quot;+offSetsMonth+Mid(fiscalMonth,5,2))+&quot;.xlsx&quot;]" DisplayName="Copy File - Unit Adds MTD to Bot input Folder" sap:VirtualizedContainerService.HintSize="384,157" sap2010:WorkflowViewState.IdRef="CopyFile_11" Overwrite="True" Path="[UnitAddsMTDShareDrivepath]" />
+          <ui:LogMessage DisplayName="Log Message -Unit Adds MTD File Copied to Bot Input Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_38" Level="Info" Message="[&quot;Unit Adds MTD File Copied to Bot Input Folder&quot;]" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <Sequence DisplayName="Sequence -Unit Adds MTD file not present" sap:VirtualizedContainerService.HintSize="376,245" sap2010:WorkflowViewState.IdRef="Sequence_13">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message - Unit Adds MTD File not exists" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_39" Level="Error" Message="[&quot;Unit Adds MTD File Not Present in Share drive&quot;]" />
+          <Throw DisplayName="Throw -Unit Adds MTD File not Exists" Exception="[new BusinessRuleException(&quot;Unit Adds MTD file does not exists in Share drive&quot;)]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="Throw_6" />
+        </Sequence>
+      </If.Else>
+    </If>
+    <ui:LogMessage DisplayName="Input Files Copied" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;Input Files Copied Successfully into Input Folder&quot;]" />
+  </Sequence>
+</Activity>

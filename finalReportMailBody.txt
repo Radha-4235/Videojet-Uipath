@@ -1,0 +1,1 @@
+<!DOCTYPE html><html><body>Bot has successfully completed Service Report Automation.<br>NA Finance,<br></br>The service revenue total for today is,<br></br><img src=foreCastIamge.png alt='Smiley face' width='1000' height='350'><br></br>Regards<br>ServiceReport_Dispatcher_VTI</body></htm>

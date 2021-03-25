@@ -1,0 +1,183 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="MovingForeCastFilesToShareDrive" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_FSMForecastFileName" Type="InArgument(x:String)" />
+    <x:Property Name="in_RevenueFile" Type="InArgument(x:String)" />
+    <x:Property Name="in_UnitAddsMTDFileName" Type="InArgument(x:String)" />
+    <x:Property Name="ProcessesUsed" Type="InArgument(s:String[])" />
+    <x:Property Name="in_MTDShareDrivePath" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>960,4542</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>MovingForeCastFilesToShareDrive_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="46">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="54">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="MovingForeCastFilesToShareDrive" sap:VirtualizedContainerService.HintSize="426,4437" sap2010:WorkflowViewState.IdRef="Sequence_5">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="RevenueFileName" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke KillAllProcesses workflow" sap:VirtualizedContainerService.HintSize="384,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Framework\KillAllProcesses.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="s:String[]" x:Key="in_ProcessList">[ProcessesUsed]</InArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:LogMessage DisplayName="Log Message -Moving to Ouput folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;Moving ForeCast Files to Output Folder&quot;]" />
+    <Assign DisplayName="Assign - Revenue File Name" sap:VirtualizedContainerService.HintSize="384,60" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[RevenueFileName]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[in_Config("Revenuefile").ToString+" "+DateTime.Now.ToString("ddMMMyy")+".xlsx"]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Run Chart File from Input Folder to Output Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_Config(&quot;ServiceRunChartsFilePath&quot;).ToString)]" DisplayName="Copy  NA Service Run Charts File to Ouput Folder" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_15" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;ServiceRunChartsFilePath&quot;).ToString)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy ForeCast File From Input Folder to Output Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_Config(&quot;ForeCastReportFilePath&quot;).ToString)]" DisplayName="Copy 2020 ForeCast File to Output Folder" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_16" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_Config(&quot;ForeCastReportFilePath&quot;).ToString)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy FSM forecast File to Output Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_FSMForecastFileName)]" DisplayName="Copy File - Copy FSM Fiscal forecast File to Output Folder" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_17" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_FSMForecastFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message -Copy Revenue File to Bot Output Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[&quot;Copy Revenue File to Bot Output Folder&quot;]" />
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Revenue File to Output Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,RevenueFileName)]" DisplayName="Copy File -Copy Revenue File to Output Folder" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_18" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,RevenueFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message -Revenue File copied to Bot Output Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Info" Message="[&quot;Copy Revenue File to Bot Output Folder Completed&quot;]" />
+    <ui:LogMessage DisplayName="Log Message -Moving Unit Adds MTD File" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;Moving Unit Adds MTD File from Input Folder to Output Folder&quot;]" />
+    <ui:LogMessage DisplayName="Log Message -Unit Adds MTD Input Path" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[&quot;Unit Adds MTD Input Path is : &quot;+path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_UnitAddsMTDFileName)]" />
+    <ui:LogMessage DisplayName="Log Message -Unit Adds Output Path" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot; Unit Adds MTD OutPut Path is : &quot;+path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_UnitAddsMTDFileName)]" />
+    <ui:LogMessage DisplayName="Log Message -Unit Adds MTD File Name" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;MTD File is :&quot;+in_UnitAddsMTDFileName]" />
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Unit Adds MTD File to Output Folder" Destination="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_UnitAddsMTDFileName)]" DisplayName="Copy File- Copy Unit Adds MTD File to Output Folder" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_24" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotInputPath&quot;).ToString,in_UnitAddsMTDFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message -Moving Unit Adds MTD File to Output Folder" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;Moving Unit Adds MTD File from Input Folder to Output Folder Completed Successfully&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - Copy to OutPut Folder Complete" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;ForeCast Files Successfully Copied to Output Folder&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - Moving Output Files to Sharedrive" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;ForeCast Files Moving to ShareFolder&quot;]" />
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Runchart File from Output Folder to J drive Automation Bot Folder" Destination="[in_Config(&quot;RunChartsJDriveBotpath&quot;).ToString]" DisplayName="Copy File - J drive Bot Folder" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_19" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_Config(&quot;ServiceRunChartsFilePath&quot;).ToString)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy ForeCast File from Output Folder to J drive Automation Bot Folder" Destination="[in_Config(&quot;ForeCastJDriveBotPath&quot;).ToString]" DisplayName="Copy Forecast file - J drive bot Folder" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_20" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_Config(&quot;ForeCastReportFilePath&quot;).ToString)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy FSM Fiscal Forecast Report to J drive Automation Folder" Destination="[in_Config(&quot;ServiceReport_Automation_ShareDrive&quot;).ToString+&quot;\&quot;+in_FSMForecastFileName]" DisplayName="Copy File -Copy  FSM fiscal File to  Share drive" sap:VirtualizedContainerService.HintSize="384,188" sap2010:WorkflowViewState.IdRef="CopyFile_21" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_FSMForecastFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message -Copy Revenue file to Share drive" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[&quot;Copy Revenue File to Share drive&quot;]" />
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Daily Revenue Data from out put folder to J drive Automation Folder" Destination="[in_Config(&quot;ServiceReport_Automation_ShareDrive&quot;).ToString+&quot;\&quot;+RevenueFileName]" DisplayName="Copy File - Copy Revenue File to Sharedrive" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_22" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,RevenueFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message -Revenue File Copied to Share drive" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="[&quot;Revenue File Copied to Share drive&quot;]" />
+    <ui:LogMessage DisplayName="Log Message - Unit Adds Share drive Path" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;Unit Adds Share Drive Path is : &quot;+in_MTDShareDrivePath]" />
+    <ui:CopyFile ContinueOnError="{x:Null}" sap2010:Annotation.AnnotationText="Copy Unit Adds MTD Data from out put folder to Unit Adds MTD Share drive Folder" Destination="[in_MTDShareDrivePath]" DisplayName="Copy File- Copy Unit Adds MTD Output file into Share drive" sap:VirtualizedContainerService.HintSize="384,199" sap2010:WorkflowViewState.IdRef="CopyFile_25" Overwrite="True" Path="[path.Combine(Environment.CurrentDirectory,in_Config(&quot;BotOutputPath&quot;).ToString,in_UnitAddsMTDFileName)]">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:CopyFile>
+    <ui:LogMessage DisplayName="Log Message - Forecast Files Copied to Share drive" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;ForeCast Files Successfully Copied to ShareDrive.&quot;]" />
+  </Sequence>
+</Activity>

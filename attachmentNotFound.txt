@@ -1,0 +1,1 @@
+Hi ,<br><br>Service Report Automation was not able to process the Service Revenue Dashboard as attachment was not found in Email.<br><br>Regards<br>ServiceReport_Dispatcher_VTI
